@@ -13,7 +13,14 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
     ~MainWindow();
+
+    void addTask();
+    void removeTask();
+    void editTask();
+
+    int line = 0;
 
 private:
     Ui::MainWindow *ui;

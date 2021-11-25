@@ -3,4 +3,8 @@
         <file>logo/logo.png</file>
         <file>logo/logo2.png</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>icons/editIcon.png</file>
+        <file>icons/trashIcon.png</file>
+    </qresource>
 </RCC>
