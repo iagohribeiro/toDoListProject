@@ -5,23 +5,31 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QtDebug>
 
 class Task : public QObject
 {
     Q_OBJECT
 
-    int indice;
+public:
+    explicit Task(QObject *parent = nullptr);
+
+     ~Task();
+
     QCheckBox* CheckBox;
     QLabel* Description;
     QPushButton* EditButton;
     QPushButton* DeleteButton;
-public:
-    explicit Task(QObject *parent = nullptr);
+    QString descriptionStore;
 
     void createCheckBox();
     void createDescription();
     void createEditButton();
     void createDeleteButton();
+    void finishTask();
+
+    void editCheckBox(QString priority);
+    void editDescription(QString color);
 
     QCheckBox* getCheckBox();
     QLabel* getDescription();

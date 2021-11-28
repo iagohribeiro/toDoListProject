@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
+#include <QCheckBox>
+#include <QMessageBox>
+#include <QInputDialog>
+#include "task.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,10 +22,9 @@ public:
     ~MainWindow();
 
     void addTask();
-    void removeTask();
-    void editTask();
-
-    int line = 0;
+    void removeTask(QObject* object);
+    void editTask(Task* object);
+    void editCheckBox(QCheckBox* checkBox);
 
 private:
     Ui::MainWindow *ui;

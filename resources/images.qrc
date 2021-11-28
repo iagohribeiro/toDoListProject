@@ -6,5 +6,7 @@
     <qresource prefix="/icons">
         <file>icons/editIcon.png</file>
         <file>icons/trashIcon.png</file>
+        <file>icons/editIconDeactivated.png</file>
+        <file>icons/trashIconDeactivated.png</file>
     </qresource>
 </RCC>
