@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(ui->medium, &QCheckBox::clicked, this, [=]{editCheckBox(ui->medium);});
     QObject::connect(ui->low, &QCheckBox::clicked, this, [=]{editCheckBox(ui->low);});
     QObject::connect(ui->none, &QCheckBox::clicked, this, [=]{editCheckBox(ui->none);});
+
+    QObject::connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::saveTasks);
 }
 
 MainWindow::~MainWindow()
@@ -34,8 +36,6 @@ void MainWindow::addTask()
 
     int row = ui->gridLayout->rowCount();
 
-    Task* newTask = new Task ();
-
     if (ui->descriptionField->text().isEmpty())
     {
         QMessageBox msgBox;
@@ -46,6 +46,7 @@ void MainWindow::addTask()
     }
     else
     {
+        Task* newTask = new Task ();
         newTask->getDescription()->setText(ui->descriptionField->text());
 
         if(ui->high->isChecked())
@@ -70,6 +71,8 @@ void MainWindow::addTask()
         layout->addWidget(newTask->getEditButton(), row, 2);
         layout->addWidget(newTask->getDeleteButton(), row, 3);
 
+        taskList.append(newTask);
+
         QObject::connect(
                     newTask->getDeleteButton(), &QPushButton::clicked,
                     this, [=]{removeTask(newTask);});
@@ -80,8 +83,9 @@ void MainWindow::addTask()
     }
 
 }
-void MainWindow::removeTask(QObject* object)
+void MainWindow::removeTask(Task* object)
 {
+    taskList.removeAll(object);
     delete object;
 
 }
@@ -123,6 +127,43 @@ void MainWindow::editCheckBox(QCheckBox* checkBox)
         ui->high->setChecked(false);
         ui->medium->setChecked(false);
         ui->low->setChecked(false);
+    }
+}
+
+void MainWindow::saveTasks()
+{
+    QDir directory = (QDir::currentPath());
+    QFile file = directory.filePath("TasksList.txt");
+
+    QString message = QString("The activities are being saved in: %1").arg(directory.path());
+
+    qInfo() << message;
+
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("The Tasks could not be saved.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+    else
+    {
+        for(Task* taskElem:qAsConst(taskList))
+        {
+            QString line = QString("State: %1; Description: %2; BackgroundDescription: rgb(%3, %4, %5);\n")
+                    .arg(taskElem->CheckBox->isChecked())
+                    .arg(taskElem->Description->text())
+                    .arg(taskElem->Description->palette().background().color().red())
+                    .arg(taskElem->Description->palette().background().color().green())
+                    .arg(taskElem->Description->palette().background().color().blue());
+
+            QTextStream out(&file);
+            out << line;
+        }
+        file.close();
+        qInfo() << "The Tasks have been successfully saved.";
     }
 }
 
