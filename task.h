@@ -1,6 +1,11 @@
 #ifndef TASK_H
 #define TASK_H
 
+/**
+ * @author Iagoh Ribeiro Lima
+ * @date 11/29/2021
+ */
+
 #include <QObject>
 #include <QCheckBox>
 #include <QLabel>
@@ -22,10 +27,10 @@ public:
     QPushButton* DeleteButton;
     QString descriptionStore;
 
-    void createCheckBox();
-    void createDescription();
-    void createEditButton();
-    void createDeleteButton();
+    void setCheckBox();
+    void setDescription();
+    void setEditButton();
+    void setDeleteButton();
     void finishTask();
 
     void editCheckBox(QString priority);

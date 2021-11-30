@@ -1,6 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/**
+ * @author Iagoh Ribeiro Lima
+ * @date 11/29/2021
+ */
+
 #include <QMainWindow>
 #include <QDebug>
 #include <QObject>

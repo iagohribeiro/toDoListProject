@@ -1,47 +1,68 @@
+/**
+ * @author Iagoh Ribeiro Lima
+ * @date 11/29/2021
+ */
+
 #include "task.h"
 
 Task::Task(QObject *parent) : QObject(parent)
 {
+    /**
+     * @class Task: This class is responsible for creating a task.
+     * A task is composed of a Checkbox, description, edit button
+     * and delete button.
+     */
+
     CheckBox = new QCheckBox();
     Description = new QLabel();
     EditButton = new QPushButton();
     DeleteButton = new QPushButton();
     descriptionStore = "";
-    createCheckBox();
-    createDescription();
-    createEditButton();
-    createDeleteButton();
 
+    /**
+     * @note Functions responsible for customizing the UI settings of Task elements.
+     */
+    setCheckBox();
+    setDescription();
+    setEditButton();
+    setDeleteButton();
+
+    /**
+     * When the check box is checked, the finish task function will be
+     * called to customize the finished task
+     */
     connect(this->CheckBox, &QCheckBox::clicked, this, &Task::finishTask);
-
 }
+
 Task::~Task()
 {
-    delete getCheckBox();
-    delete getDescription();
-    delete getEditButton();
-    delete getDeleteButton();
+    delete CheckBox;
+    delete Description;
+    delete EditButton;
+    delete DeleteButton;
 }
 
-void Task::createCheckBox()
+void Task::setCheckBox()
 {
     CheckBox->setObjectName(QString::fromUtf8("checkBox"));
 }
 
-void Task::createDescription()
+void Task::setDescription()
 {
     Description->setObjectName(QString::fromUtf8("description"));
     Description->setMaximumSize(QSize(800, 20));
 
 }
-void Task::createEditButton()
+
+void Task::setEditButton()
 {
     EditButton->setObjectName(QString::fromUtf8("editButton"));
     EditButton->setMinimumSize(QSize(30, 30));
     EditButton->setMaximumSize(QSize(40, 40));
     EditButton->setStyleSheet(QString::fromUtf8("image: url(:/icons/icons/editIcon.png)"));
 }
-void Task::createDeleteButton()
+
+void Task::setDeleteButton()
 {
     DeleteButton->setObjectName(QString::fromUtf8("deleteButton"));
     DeleteButton->setMinimumSize(QSize(30, 30));
@@ -51,7 +72,10 @@ void Task::createDeleteButton()
 
 void Task::editCheckBox(QString priority)
 {
-    CheckBox->setObjectName(QString::fromUtf8("checkBox"));
+    /**
+     * @brief Functions responsible for changing the checkbox UI settings
+     * according to the task's priority.
+    */
 
     CheckBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
@@ -112,13 +136,17 @@ void Task::editCheckBox(QString priority)
         "	border-bottom-right-radius: 5px;\n"
         "	border-bottom-left-radius: 5px;\n"
         "}"));
-
     }
-
 }
 
 void Task::editDescription(QString color)
 {
+    /**
+     *  @brief Functions responsible for changing the UI settings
+     *  of the description background according to the color chosen by the user.
+     *
+     */
+
     QString setColor;
 
     if (color.toUpper() == "RED")
@@ -139,16 +167,28 @@ void Task::editDescription(QString color)
     }
 
     Description->setStyleSheet(setColor);
-
 }
 
 void Task::finishTask()
 {
+    /**
+     *  @brief Functions responsible for changing the UI settings
+     *  of Task elements according to the checkbox status.
+     *
+     *
+     */
+
     QColor color = Description->palette().color(QPalette::Background);
 
     if(CheckBox->isChecked())
     {
+        /**
+         * @note If the task checkbox is checked, the background color is saved to
+         * restore the color if the checkbox is deselected in the future.
+         */
+
         descriptionStore = QString(" background-color: rgb(%1, %2, %3);").arg(color.red()).arg(color.green()).arg(color.blue());
+
         Description->setDisabled(true);
         EditButton->setDisabled(true);
         DeleteButton->setDisabled(true);
@@ -166,11 +206,8 @@ void Task::finishTask()
         EditButton->setStyleSheet("image: url(:/icons/icons/editIcon.png);");
         DeleteButton->setStyleSheet("image: url(:/icons/icons/trashIcon.png);");
         Description->setStyleSheet(descriptionStore);
-
     }
-
 }
-
 
 QCheckBox* Task::getCheckBox()
 {
@@ -191,4 +228,3 @@ QPushButton* Task::getDeleteButton()
 {
     return DeleteButton;
 }
-
